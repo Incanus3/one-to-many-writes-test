@@ -45,6 +45,7 @@ class CustomerTest {
     assertThat(reloadedDevs.getMembers()).isEqualTo(List.of(rob));
   }
 
+
   @Test
   void set_from_one_to_many_side() {
     Customer rob = new Customer("Rob");
@@ -61,6 +62,32 @@ class CustomerTest {
     assertThat(devs.getId()).isGreaterThan(0);
 
     devs.setMembers(List.of(rob));
+    server.save(devs);
+
+    Customer reloadedRob = server.find(Customer.class, rob.getId());
+    Group reloadedDevs = server.find(Group.class, devs.getId());
+
+    // THESE FAIL
+    assertThat(reloadedRob.getGroup()).isEqualTo(devs);
+    assertThat(reloadedDevs.getMembers()).isEqualTo(List.of(rob));
+  }
+
+  @Test
+  void add_from_one_to_many_side() {
+    Customer rob = new Customer("Rob");
+
+    Database server = DB.getDefault();
+    server.save(rob);
+
+    assertThat(rob.getId()).isGreaterThan(0);
+
+    Group devs = new Group("Devs");
+
+    server.save(devs);
+
+    assertThat(devs.getId()).isGreaterThan(0);
+
+    devs.addMember(rob);
     server.save(devs);
 
     Customer reloadedRob = server.find(Customer.class, rob.getId());

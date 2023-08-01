@@ -42,6 +42,10 @@ public class Group extends Model {
     this.members = members;
   }
 
+  public void addMember(Customer member) {
+    this.members.add(member);
+  }
+
   @OneToMany(mappedBy = "group", cascade = {CascadeType.ALL})
   private List<Customer> members = new ArrayList<>();
 }
