@@ -2,32 +2,17 @@ package org.example.domain;
 
 import io.ebean.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 @Entity
 public class Customer extends Model {
-
   @Id
   long id;
 
   String name;
 
-  String notes;
-
-  @Version
-  long version;
-
   public Customer(String name) {
     this.name = name;
-  }
-
-  /**
-   * Only used to demonstrate "stateless update".
-   */
-  public Customer() {
-
   }
 
   public long getId() {
@@ -46,20 +31,15 @@ public class Customer extends Model {
     this.name = name;
   }
 
-  public String getNotes() {
-    return notes;
+  public Group getGroup() {
+    return group;
   }
 
-  public void setNotes(String notes) {
-    this.notes = notes;
+  public void setGroup(Group group) {
+    this.group = group;
   }
 
-  public long getVersion() {
-    return version;
-  }
-
-  public void setVersion(long version) {
-    this.version = version;
-  }
-
+  @ManyToOne(optional = true, cascade = {CascadeType.ALL})
+  @JoinColumn(name = "group_id", nullable = true, insertable = true, updatable = true)
+  private Group group = null;
 }

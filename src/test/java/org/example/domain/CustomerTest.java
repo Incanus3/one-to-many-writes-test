@@ -4,75 +4,70 @@ import io.ebean.DB;
 import io.ebean.Database;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
  * When running tests in the IDE install the "Enhancement plugin".
  * <p>
- * http://ebean-orm.github.io/docs/setup/enhancement#ide
+ * <a href="http://ebean-orm.github.io/docs/setup/enhancement#ide">...</a>
  */
+@SuppressWarnings("DataFlowIssue")
 class CustomerTest {
-
-
   /**
    * Get the "default database" and save().
    */
   @Test
-  void insert_via_database() {
-
+  void set_from_many_to_one_side() {
     Customer rob = new Customer("Rob");
 
     Database server = DB.getDefault();
     server.save(rob);
 
     assertThat(rob.getId()).isGreaterThan(0);
+
+    Group devs = new Group("Devs");
+
+    server.save(devs);
+
+    assertThat(devs.getId()).isGreaterThan(0);
+
+    rob.setGroup(devs);
+    server.save(rob);
+
+    Customer reloadedRob = server.find(Customer.class, rob.getId());
+    Group reloadedDevs = server.find(Group.class, devs.getId());
+
+    // this works
+    assertThat(reloadedRob.getGroup()).isEqualTo(devs);
+    assertThat(reloadedDevs.getMembers()).isEqualTo(List.of(rob));
   }
 
-  /**
-   * Use the Ebean singleton (effectively using the "default server").
-   */
   @Test
-  void insert_via_model() {
+  void set_from_one_to_many_side() {
+    Customer rob = new Customer("Rob");
 
-    Customer jim = new Customer("Jim");
-    jim.save();
+    Database server = DB.getDefault();
+    server.save(rob);
 
-    assertThat(jim.getId()).isGreaterThan(0);
+    assertThat(rob.getId()).isGreaterThan(0);
+
+    Group devs = new Group("Devs");
+
+    server.save(devs);
+
+    assertThat(devs.getId()).isGreaterThan(0);
+
+    devs.setMembers(List.of(rob));
+    server.save(devs);
+
+    Customer reloadedRob = server.find(Customer.class, rob.getId());
+    Group reloadedDevs = server.find(Group.class, devs.getId());
+
+    // THESE FAIL
+    assertThat(reloadedRob.getGroup()).isEqualTo(devs);
+    assertThat(reloadedDevs.getMembers()).isEqualTo(List.of(rob));
   }
-
-
-  /**
-   * Find and then update.
-   */
-  @Test
-  void updateRob() {
-
-    Customer newBob = new Customer("Bob");
-    newBob.save();
-
-    Customer bob = DB.find(Customer.class)
-      .where().eq("name", "Bob")
-      .findOne();
-
-    bob.setNotes("Doing an update");
-    bob.save();
-  }
-
-  /**
-   * Execute an update without a prior query.
-   */
-  @Test
-  void statelessUpdate() {
-
-    Customer newMob = new Customer("Mob");
-    newMob.save();
-
-    Customer upd = new Customer();
-    upd.setId(newMob.getId());
-    upd.setNotes("Update without a fetch");
-
-    upd.update();
-  }
-
 }
