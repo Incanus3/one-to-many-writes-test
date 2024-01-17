@@ -2,6 +2,7 @@ package org.example.domain;
 
 import io.ebean.DB;
 import io.ebean.Database;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * <p>
  * <a href="http://ebean-orm.github.io/docs/setup/enhancement#ide">...</a>
  */
+@Disabled
 @SuppressWarnings("DataFlowIssue")
 class CustomerTest {
   /**

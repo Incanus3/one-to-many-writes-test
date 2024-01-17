@@ -11,14 +11,13 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
     <ebean-maven-plugin.args>debug=2</ebean-maven-plugin.args>
-    <ebean.version>13.20.1</ebean.version>
+    <ebean.version>13.25.1</ebean.version>
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
     <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>3.0.0</maven-failsafe-plugin.version>
   </properties>
 
   <dependencies>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -55,19 +54,28 @@
       <scope>test</scope>
     </dependency>
 
+    <!--<dependency>-->
+    <!--  <groupId>org.slf4j</groupId>-->
+    <!--  <artifactId>slf4j-simple</artifactId>-->
+    <!--  <version>2.0.11</version>-->
+    <!--</dependency>-->
+
+    <!--<dependency>-->
+    <!--  <groupId>ch.qos.logback</groupId>-->
+    <!--  <artifactId>logback-classic</artifactId>-->
+    <!--  <version>1.4.14</version>-->
+    <!--</dependency>-->
+
     <dependency>
       <groupId>org.avaje.composite</groupId>
       <artifactId>logback</artifactId>
       <version>1.1</version>
       <scope>test</scope>
     </dependency>
-
-
   </dependencies>
 
   <build>
     <plugins>
-
       <plugin>
         <groupId>io.repaint.maven</groupId>
         <artifactId>tiles-maven-plugin</artifactId>
@@ -101,7 +109,6 @@
           <release>${java.version}</release>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
 </project>
